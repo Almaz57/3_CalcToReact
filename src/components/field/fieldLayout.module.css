@@ -1,0 +1,23 @@
+.field {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 4px; /* Толщина границ между клетками */
+	background: #333; /* Цвет границ */
+	padding: 4px; /* Толщина внешней границы */
+	max-width: 400px;
+	margin: 20px auto;
+}
+
+.cell {
+	aspect-ratio: 1; /* Квадратные ячейки */
+	border: none;
+	background: white;
+	font-size: 60px;
+	cursor: pointer;
+	transition: background 0.3s;
+	min-width: 80px;
+}
+
+.cell:hover {
+	background: #f0f0f0;
+}
