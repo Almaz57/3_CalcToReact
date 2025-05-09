@@ -10,7 +10,7 @@ export const GameLayout = ({ ...props }) => {
 				isGameEnded={props.isGameEnded}
 				isDraw={props.isDraw}
 			></Information>
-			<Field {...props}></Field>
+			<Field field={props.field} playerMoves={props.playerMoves}></Field>
 			<button onClick={props.newGame} className={styles['reset-button']}>
 				Новая игра
 			</button>
@@ -24,4 +24,5 @@ GameLayout.propTypes = {
 	isDraw: PropTypes.bool,
 	field: PropTypes.arrayOf(PropTypes.string),
 	newGame: PropTypes.func,
+	playerMoves: PropTypes.func,
 };

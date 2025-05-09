@@ -6,44 +6,58 @@ export const Game = () => {
 	const [isGameEnded, setIsGameEnded] = useState(false);
 	const [isDraw, setIsDraw] = useState(false);
 	const [field, setField] = useState(['', '', '', '', '', '', '', '', '']);
+	const WIN_PATTERNS = [
+		[0, 1, 2],
+		[3, 4, 5],
+		[6, 7, 8], // Варианты побед по горизонтали
+		[0, 3, 6],
+		[1, 4, 7],
+		[2, 5, 8], // Варианты побед по вертикали
+		[0, 4, 8],
+		[2, 4, 6], // Варианты побед по диагонали
+	];
+
 	function newGame() {
 		setCurrentPlayer('X');
 		setIsGameEnded(false);
 		setIsDraw(false);
 		setField(['', '', '', '', '', '', '', '', '']);
 	}
+
+	function playerMoves(ind) {
+		if (field[ind] || isGameEnded || isDraw) return;
+		//Нанесение хода на поле
+		const newField = [...field];
+		newField[ind] = currentPlayer;
+		setField(newField);
+		//Проверка на победу
+		const isWon = WIN_PATTERNS.some((combo) => {
+			let count = 0;
+			newField.forEach((el, ind) => {
+				if (
+					el === currentPlayer &&
+					(ind === combo[0] || ind === combo[1] || ind === combo[2])
+				)
+					count++;
+			});
+			if (count === 3) return true;
+		});
+		if (isWon) return setIsGameEnded(true);
+		//Проверка на ничью
+		const isGameDraw = newField.every((el) => el === 'X' || el === 'O');
+		if (isGameDraw) return setIsDraw(true);
+		//Смена хода
+		setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+	}
+
 	return (
 		<GameLayout
 			currentPlayer={currentPlayer}
-			setCurrentPlayer={setCurrentPlayer}
 			isGameEnded={isGameEnded}
-			setIsGameEnded={setIsGameEnded}
 			isDraw={isDraw}
-			setIsDraw={setIsDraw}
 			field={field}
-			setField={setField}
 			newGame={newGame}
+			playerMoves={playerMoves}
 		></GameLayout>
 	);
 };
-
-// import PropTypes from 'prop-types';
-
-// // Явно неправильные пропсы для теста
-// export const TestComponent = ({ title, count }) => {
-// 	return (
-// 		<div>
-// 			{title} - {count}
-// 		</div>
-// 	);
-// };
-
-// TestComponent.propTypes = {
-// 	title: PropTypes.number.isRequired, // Намеренная ошибка
-// 	count: PropTypes.string.isRequired, // Намеренная ошибка
-// };
-
-// // Использование с неверными типами
-// export const Game = () => (
-// 	<TestComponent title={42} count="hello" /> // Должны быть ошибки
-// );
